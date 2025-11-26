@@ -1,73 +1,82 @@
 // script.js
 
-// 1. Wait for the entire HTML document to load before running JavaScript
 document.addEventListener('DOMContentLoaded', function () {
 
-    // 2. Select the necessary elements using their IDs (DOM Manipulation)
+    // Select the necessary elements (DOM Manipulation)
     const form = document.getElementById('registration-form');
     const feedbackDiv = document.getElementById('form-feedback');
 
-    // 3. Listen for the 'submit' event (when the Register button is clicked)
+    // Add the 'submit' event listener to the form
     form.addEventListener('submit', function (event) {
 
-        // CRITICAL STEP: Stop the form from submitting and refreshing the page
+        // CRITICAL: Prevent the default form submission (page refresh)
         event.preventDefault();
 
-        // Run the main function that checks all the inputs
         validateForm();
     });
 
     function validateForm() {
 
-        // 4. Retrieve and trim the user input values
+        // 1. Retrieve and trim input values
         const username = document.getElementById('username').value.trim();
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
 
-        // 5. Initialize tracking variables
+        // 2. Initialize tracking variables
         let isValid = true;
         const messages = [];
 
-        // --- Validation Checks (Conditions) ---
+        // --- Validation Checks ---
 
-        // A. Username Check (must be 3 or more characters)
+        // FAILED REQUIREMENT: Username Validation (must be >= 3 characters)
         if (username.length < 3) {
             isValid = false;
             messages.push("Username must be at least 3 characters long.");
         }
 
-        // B. Email Check (must contain '@' and '.')
+        // FAILED REQUIREMENT: Email Validation (must contain '@' and '.')
         if (!email.includes('@') || !email.includes('.')) {
             isValid = false;
             messages.push("Please enter a valid email address (must contain '@' and '.').");
         }
 
-        // C. Password Check (must be 8 or more characters)
+        // FAILED REQUIREMENT: Password Validation (must be >= 8 characters)
         if (password.length < 8) {
             isValid = false;
             messages.push("Password must be at least 8 characters long.");
         }
 
-        // --- Displaying Feedback ---
+        // --- Feedback Display Logic ---
 
-        feedbackDiv.style.display = "block"; // Make the red/green box visible
+        // MANDATORY CHECK: Make feedbackDiv visible
+        feedbackDiv.style.display = "block";
 
         if (isValid) {
-            // Success State
+            // SUCCESS STATE
+
+            // Set text content to success message
             feedbackDiv.textContent = "Registration successful!";
-            feedbackDiv.style.backgroundColor = "#d4edda"; // Light green
-            feedbackDiv.style.color = "#155724"; // Dark green
+
+            // Set color to the required success color: #28a745
+            feedbackDiv.style.color = "#28a745";
+
+            // Also update background color for better visibility (not explicitly required, but good practice)
+            feedbackDiv.style.backgroundColor = "#d4edda";
 
             // Clear the form inputs after success
             form.reset();
         } else {
-            // Failure State
-            // Combine all error messages with line breaks (<br>)
+            // FAILURE STATE
+
+            // MANDATORY CHECK: Join messages with <br> and assign to innerHTML
+            // innerHTML is used because <br> is an HTML tag
             feedbackDiv.innerHTML = messages.join('<br>');
 
-            // The red background and text color are set by your style.css, but we'll ensure the colors are error-appropriate here too:
-            feedbackDiv.style.backgroundColor = "#ffbaba"; // Light red
-            feedbackDiv.style.color = "#d8000c"; // Dark red
+            // MANDATORY CHECK: Set color to the required failure color: #dc3545
+            feedbackDiv.style.color = "#dc3545";
+
+            // Restore the error background (which should match the style.css default)
+            feedbackDiv.style.backgroundColor = "#ffbaba";
         }
     }
 });
